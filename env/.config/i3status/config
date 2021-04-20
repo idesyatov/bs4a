@@ -15,6 +15,7 @@ order += "memory"
 order += "cpu_usage"
 #order += "cpu_temperature 0"
 order += "tztime local"
+order += "tztime keyboard_layout"
 
 # Выбираем иконки
 # https://fontawesome.com/icons?d=gallery&p=2&c=computers
@@ -143,4 +144,9 @@ cpu_usage {
 # вывод даты и времени по заданному формату
 tztime local {
     format = " %d %b  %H:%M:%S"
+}
+
+# отображение раскладки через ~/bin/i3status-custom.sh
+tztime keyboard_layout {
+    format = "keyboard_layout"
 }

@@ -35,12 +35,12 @@ function forming_json_block {
   echo $json
 }
 
-# получение значения uptime
+# получение значения
 # формирование JSON с полученным текстом
 # примешивание нашего JSON к общему JSON
 function keyboard_layout {
   # формируем body содержимым, которое собираемся вывести
-  body=`uptime -p`
+  body=`xset -q|grep LED| awk '{ if (substr ($10,5,1) == 1) print "RU"; else print "EN"; }'`
 
   # сформируем json блока.
   # вторым параметром можно передать цвет
@@ -49,7 +49,7 @@ function keyboard_layout {
 
   # примешивание нашего JSON к общему JSON
   # первым параметром передаем имя блока в конфиге
-  json_array=$(update_holder custom_uptime "$json")
+  json_array=$(update_holder keyboard_layout "$json")
 }
 
 # перехват JSON i3status, обогащение его своей выдачей

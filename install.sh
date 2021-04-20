@@ -39,9 +39,11 @@ install_pkgs() {
 
     i3_desktop() {
         echo -e "${GREEN}i3 desktop env installing${NORMAL}"
+        sudo timedatectl set-ntp 1
+
         sudo pacman -Sy --needed \
         xterm xorg-xrandr \
-        i3-wm i3status i3lock dmenu \
+        i3-wm i3status i3lock dmenu jq \
         wpa_supplicant \
         wireless_tools \
         networkmanager \
@@ -72,7 +74,7 @@ install_pkgs() {
         }
 
         sudo pacman -Sy --needed \
-        git vim tmux zsh tldr mc
+        git vim tmux zsh tldr htop mc
         oh_my_zsh
     }
 
