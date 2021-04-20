@@ -5,7 +5,7 @@
 export ZSH=$HOME/.oh-my-zsh
 export EDITOR=vim
 
-ZSH_THEME="afowler"
+ZSH_THEME="gentoo"
 
 plugins=(git docker sudo colored-man-pages colorize)
 

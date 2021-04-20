@@ -17,9 +17,13 @@ install_pkgs() {
     sudo pacman -Syy
 
     build_yay() {
+        echo -e "${GREEN}Check yay${NORMAL}"
+
         local DOMAIN="https://aur.archlinux.org/yay.git"
 
         if [ ! -f "/usr/bin/yay" ]; then
+            echo "${GREEN}Build yay${NORMAL}"
+
             sudo pacman -Sy --needed git base-devel && \
             git clone $DOMAIN /tmp/yay && cd /tmp/yay && \
             makepkg -si && cd $WORK_DIR
@@ -28,25 +32,29 @@ install_pkgs() {
     }
 
     yay_soft() {
+        echo -e "${GREEN}Yay soft${NORMAL}"
         yay -Syy
     }
 
     i3_desktop() {
+        echo -e "${GREEN}i3 desktop env installing${NORMAL}"
         pacman -Sy --needed \
         xterm xorg-xrandr \
         i3-wm i3status i3lock dmenu
     }
 
     tools() {
+        echo -e "${GREEN}Tools installing${NORMAL}"
         sudo pacman -Sy --needed \
         rxvt-unicode rxvt-unicode-terminfo \
-        ttf-ubuntu-font-family
+        ttf-ubuntu-font-family \
         xfce4-screenshooter \
         xfce4-power-manager \
         picom feh keepassxc
     }
 
     utils() {
+        echo -e "${GREEN}Utils installing${NORMAL}"
         oh_my_zsh() {
             local DOMAIN="https://raw.githubusercontent.com"
             local URL="ohmyzsh/ohmyzsh/master/tools/install.sh"
@@ -69,6 +77,7 @@ install_pkgs() {
 }
 
 sync_configs_links() {
+    echo -e "${GREEN}Updating config symlinks${NORMAL}"
     ln -sfn ${WORK_DIR}/env/.xinitrc ~/.xinitrc
     ln -sfn ${WORK_DIR}/env/.Xresources ~/.Xresources
 
@@ -84,7 +93,7 @@ sync_configs_links() {
 
 main() {
     if [ "$(id -u)" == "0" ]; then
-        echo "${RED}This script must not be run as root${NORMAL}"
+        echo -e "${RED}This script must not be run as root${NORMAL}"
         exit 1
     fi
     case "$1" in
@@ -102,7 +111,7 @@ main() {
             exit 0
             ;;
         *)
-        echo "use ${GREEN}--help${NORMAL}"
+        echo -e "use ${GREEN}--help${NORMAL}"
         exit 1
         ;;
     esac
