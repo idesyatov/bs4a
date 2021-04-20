@@ -1,7 +1,7 @@
 set $mod Mod4
 # Font for window title bars
 # font pango:monospace 8
-font pango:Fira Mono 8
+font pango:Ubuntu Mono 8
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 # start a terminal
@@ -118,7 +118,7 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-    font pango:Fira Mono 9
+    font pango:Ubuntu Mono 10
     status_command i3status -c ~/.config/i3status/config
     colors {
         background #273240

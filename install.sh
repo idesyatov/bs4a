@@ -38,7 +38,7 @@ install_pkgs() {
 
     i3_desktop() {
         echo -e "${GREEN}i3 desktop env installing${NORMAL}"
-        pacman -Sy --needed \
+        sudo pacman -Sy --needed \
         xterm xorg-xrandr \
         i3-wm i3status i3lock dmenu
     }
