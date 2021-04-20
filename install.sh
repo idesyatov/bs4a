@@ -14,6 +14,27 @@ DATE_NOW=$(date +'%Y/%m/%d %r')
 WORK_DIR=$(pwd)
 
 
+locale_conf() {
+sudo bash -c 'cat <<'EOF' > /etc/locale.gen
+en_US.UTF-8 UTF-8
+ru_RU.UTF-8 UTF-8
+EOF'
+
+sudo bash -c 'cat <<'EOF' > /etc/locale.conf
+LANG=en_US.UTF-8
+LC_NUMERIC=ru_RU.UTF-8
+LC_TIME=ru_RU.UTF-8
+LC_MONETARY=ru_RU.UTF-8
+LC_PAPER=ru_RU.UTF-8
+LC_NAME=ru_RU.UTF-8
+LC_ADDRESS=ru_RU.UTF-8
+LC_TELEPHONE=ru_RU.UTF-8
+LC_MEASUREMENT=ru_RU.UTF-8
+LC_IDENTIFICATION=ru_RU.UTF-8
+EOF'
+sudo locale-gen
+}
+
 install_pkgs() {
     sudo pacman -Syy
 
@@ -110,6 +131,7 @@ main() {
     fi
     case "$1" in
         "--all")
+            locale_conf
             install_pkgs
             sync_configs_links
             ;;
