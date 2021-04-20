@@ -40,7 +40,12 @@ install_pkgs() {
         echo -e "${GREEN}i3 desktop env installing${NORMAL}"
         sudo pacman -Sy --needed \
         xterm xorg-xrandr \
-        i3-wm i3status i3lock dmenu
+        i3-wm i3status i3lock dmenu \
+        wpa_supplicant \
+        wireless_tools \
+        networkmanager \
+        network-manager-applet \
+        sudo systemctl enable NetworkManager.service
     }
 
     tools() {
@@ -48,6 +53,7 @@ install_pkgs() {
         sudo pacman -Sy --needed \
         rxvt-unicode rxvt-unicode-terminfo \
         ttf-ubuntu-font-family \
+        ttf-font-awesome \
         xfce4-screenshooter \
         xfce4-power-manager \
         picom feh keepassxc
@@ -84,10 +90,13 @@ sync_configs_links() {
     ln -sfn ${WORK_DIR}/env/.zshrc ~/.zshrc
     ln -sfn ${WORK_DIR}/env/.vimrc ~/.vimrc
 
-    rm -r ~/.config/i3
+    rm -rf ~/bin
+    ln -sfn ${WORK_DIR}/env/bin ~/bin
+
+    rm -rf ~/.config/i3
     ln -sfn ${WORK_DIR}/env/.config/i3 ~/.config/i3
 
-    rm -r ~/.config/i3status
+    rm -rf ~/.config/i3status
     ln -sfn ${WORK_DIR}/env/.config/i3status ~/.config/i3status
 }
 

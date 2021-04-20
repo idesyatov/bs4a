@@ -1,58 +1,146 @@
 general {
-    colors = true
-    interval = 5
-    output_format = i3bar
+    colors = true # включение/выключение поддержки цветов true/false
+    interval = 1 # интервал обновления строки статуса, в секундах
+    output_format = "i3bar" # формат вывода, устанавливаем i3bar (JSON)
 }
-#order += "ipv6"
+
+# порядок вывода модулей
+order += "run_watch openvpn"
+order += "run_watch openconnect"
+order += "volume master"
+#order += "wireless _first_"
+#order += "battery all"
 order += "disk /"
 order += "memory"
 order += "cpu_usage"
-order += "load"
 #order += "cpu_temperature 0"
-#order += "wireless _first_"
-order += "ethernet _first_"
-#order += "battery all"
-order += "volume master"
 order += "tztime local"
-wireless _first_ {
-    format_up = "W: (%quality at %essid) %ip"
-    format_down = "W: down"
-}
-ethernet _first_ {
-    # if you use %speed, i3status requires root privileges
-    format_up = "E: %ip (%speed)"
-    format_down = "E: down"
-}
-battery all {
-    format = "%status %percentage %remaining"
-}
-tztime local {
-    format = "%Y-%m-%d %H:%M:%S"
-}
-load {
-    format = "%1min"
-    #format = "[ load: %1min, %5min, %15min ]"
+
+# Выбираем иконки
+# https://fontawesome.com/icons?d=gallery&p=2&c=computers
+
+# отслеживание процесса openvpn
+# служит как индикатор работы openvpn клиента
+# при запуске openvpn необходимо
+# указывать параметр --writepid /var/run/openvpn.pid
+run_watch openvpn {
+    pidfile = "/var/run/openvpn.pid"
+    format = " openvpn"
+    # если пареметр format_down оставить пустым,
+    # то при неактивном процессе блок будет отсутствовать
+    format_down=""
 }
 
-cpu_usage {
-    format = "CPU: %usage"
+# аналогичный блок индикатор openconnect vpn клиента
+# требуется запуск клиента с параметром --pid-file=/var/run/openconnect.pid
+run_watch openconnect {
+    pidfile = "/var/run/openconnect.pid"
+    format = " openconnect vpn"
+    format_down=""
 }
-cpu_temperature 0 {
-    format = "T: %degrees °C"
-    path = "/sys/devices/platform/coretemp.0/temp1_input"
-}
-memory {
-    format = "MEM: %used"
-    threshold_degraded = "10%"
-    format_degraded = "MEMORY: %free"
-}
-disk "/" {
-    format = "ROOT: %avail"
-}
+
+# управление громкостью звука
 volume master {
-    format = "VOL: %volume"
-    format_muted = "VOL: muted (%volume)"
+    format = " %volume" # шаблон громкости в активном состоянии
+    format_muted = " %volume" # шаблон громкости в состоянии muted (без звука)
     device = "default"
     mixer = "Master"
     mixer_idx = 0
+}
+
+# индикатор WIFI
+wireless _first_ {
+    # шаблон вывода, можно дополнить
+    # наименованием подключения %essid
+    # и ip адресом %ip
+    format_up = "%quality %frequency"
+    format_down = "W: down"
+}
+
+# состояние заряда батареи
+battery all {
+    # шаблон вывода, можно дополнить
+    # оставшимся временем работы %emptytime
+    # энергопотреблением %consumption в ваттах
+    format = "%status %percentage"
+
+    # true - показ процента заряда от 0 до 100
+    # false - показ процента заряда от 0 до n, с учетом
+    # изношенности аккумулятора
+    last_full_capacity = true
+    format_down = "No battery"
+    status_chr = "" # статус подзарядки
+    status_bat = "" # статус в режиме работы от батареи
+    status_unk = "? UNK" # неизвестный статус
+    status_full = "" # статус полного заряда
+    path = "/sys/class/power_supply/BAT%d/uevent"
+
+    # нижний порог заряда, после которого блок
+    # будет окрашен в "color_bad" (по умолчанию красный)
+    # подробнее в man i3status
+    low_threshold = 10
+}
+
+# отслеживаемый накопитель
+disk "/" {
+    # доступные переменные:
+    # %used, %percentage_used - занятое пространство
+    # %free, %percentage_free - свободное пространство
+    # %avail, %percentage_avail - доступное пространство
+    # %total - всего
+    format = " %avail"
+
+    # будет окрашен в "color_bad" (по умолчанию красный)
+    # при достижении нижнего порога менее 10GB доступного пространства
+    low_threshold = "10"
+    threshold_type = "gbytes_avail"
+    format_below_threshold = " Warning: %avail"
+}
+
+# миниторинг оперативной памяти
+memory {
+    # доступные переменные:
+    # %total, percentage_total
+    # %used, percentage_used
+    # %free, percentage_free
+    # %available, percentage_available
+    # %shared, percentage_shared
+    format = " %used"
+
+    # порог, при котором вывод окрасится в
+    # желтый (degraded) или красный (critical)
+    # а формат вывода изменится на format_degraded
+    threshold_degraded = "1G"
+    threshold_critical = "200M"
+    format_degraded = "MEMORY < %available"
+}
+
+# температура процессора
+cpu_temperature 0 {
+    format = " %degrees"
+
+    # верхний порог температуры, при достижении которого
+    # вывод окрасится красным,
+    # и формат изменится на format_above_threshold
+    max_threshold = "80"
+    format_above_threshold = " %degrees"
+    path = "/sys/class/thermal/thermal_zone0/temp"
+}
+
+# использование центрального процессора
+cpu_usage {
+    # %usage - процентное использование ЦП
+    # %cpu<N> - начиная с %cpu0 и далее показывает использование ядер
+    format = " %usage"
+
+    # доступны параметры:
+    # degraded_threshold, окрас в желтый, по умолчанию 90
+    # max_threshold, окрас в красный, по умолчанию 95
+    # и кастомные форматы для них
+    # format_above_degraded_threshold и format_above_threshold
+}
+
+# вывод даты и времени по заданному формату
+tztime local {
+    format = " %d %b  %H:%M:%S"
 }
