@@ -75,7 +75,7 @@ install_pkgs() {
     tools() {
         echo -e "${GREEN}Tools installing${NORMAL}"
         sudo pacman -Sy --needed \
-        rxvt-unicode rxvt-unicode-terminfo \
+        kitty \
         ttf-ubuntu-font-family \
         ttf-font-awesome \
         xfce4-screenshooter \
@@ -122,6 +122,9 @@ sync_configs_links() {
 
     rm -rf ~/.config/i3status
     ln -sfn ${WORK_DIR}/env/.config/i3status ~/.config/i3status
+
+    rm -rf ~/.config/kitty
+    ln -sfn ${WORK_DIR}/env/.config/kitty ~/.config/kitty
 }
 
 main() {
