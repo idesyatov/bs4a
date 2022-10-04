@@ -76,6 +76,7 @@ install_pkgs() {
         echo -e "${GREEN}Tools installing${NORMAL}"
         sudo pacman -Sy --needed \
         kitty \
+        rxvt-unicode rxvt-unicode-terminfo \
         ttf-ubuntu-font-family \
         ttf-font-awesome \
         xfce4-screenshooter \
