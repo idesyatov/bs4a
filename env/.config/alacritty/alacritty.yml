@@ -1,18 +1,18 @@
 font:
   normal:
-    family: monospace
+    family: MesloLGM NF
     style: Regular
 
   bold:
-    family: monospace
+    family: MesloLGM NF
     style: Bold
 
   italic:
-    family: monospace
+    family: MesloLGM NF
     style: Italic
 
   bold_italic:
-    family: monospace
+    family: MesloLGM NF
     style: Bold Italic
 
-  size: 11
+  size: 9
