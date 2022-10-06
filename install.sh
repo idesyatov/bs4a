@@ -123,8 +123,8 @@ sync_configs_links() {
     rm -rf ~/.config/i3status
     ln -sfn ${WORK_DIR}/env/.config/i3status ~/.config/i3status
 
-    rm -rf ~/.config/kitty
-    ln -sfn ${WORK_DIR}/env/.config/kitty ~/.config/kitty
+    rm -rf ~/.config/alacritty
+    ln -sfn ${WORK_DIR}/env/.config/alacritty ~/.config/alacritty
 }
 
 main() {
