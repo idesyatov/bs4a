@@ -8,7 +8,14 @@ export EDITOR=vim
 
 ZSH_THEME="gentoo"
 
-plugins=(git docker sudo colored-man-pages colorize)
+plugins=(
+  git
+  docker
+  kubectl
+  ssh-agent
+  colored-man-pages 
+  colorize
+)
 
 HISTFILESIZE=10000
 HISTSIZE=10000
